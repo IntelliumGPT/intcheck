@@ -10,20 +10,16 @@ RUN apt-get update && \
 # Set the working directory to /app
 WORKDIR /app
 
-# Copy only package.json and yarn.lock first for caching
+# Copy package.json and yarn.lock first for caching
 COPY package.json yarn.lock ./
 
 # Install Node.js packages using Yarn
-RUN yarn install --frozen-lockfile && \
-    rm -rf /app/node_modules/.cache
+RUN yarn install --frozen-lockfile
 
 # Copy the rest of the application code
 COPY . .
 
-# Add the missing dev dependency to resolve babel-preset-react-app warning
-RUN yarn add --dev @babel/plugin-proposal-private-property-in-object
-
-# Build the application
+# Build the application (assuming you have a build script defined in your package.json)
 RUN yarn build
 
 # Expose port 3000 (change this if your app listens on a different port)
